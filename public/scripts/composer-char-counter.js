@@ -9,6 +9,11 @@ $(function() {
         if (countdown < 50) {
             counter.css('color', 'darkred');
         } 
+
+        if (countdown === 0) {
+            text.prop('disabled', true);
+        }
+
         counter.html(countdown);
     });
 
