@@ -1,12 +1,19 @@
 
 $(function() {
+    loadTweets()
 
     function loadTweets() {
+        $('.tweet-container').empty();
         $.getJSON('/tweets')
         .then( data => { 
-            console.log('this works?', data);
             renderTweets(data);
         });
+    };
+
+    function escape(str) {
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
     };
 
     function createTweetElement(tweetData) {
@@ -22,7 +29,7 @@ $(function() {
                     </header>
 
                     <article class="tweet-main">
-                        <p>${content}</p>
+                        <p>${escape(content)}</p>
                     </article>
 
                     <footer>
@@ -32,9 +39,10 @@ $(function() {
         return HTML;  
     };
 
+
     function renderTweets(tweetData) {
         let render; 
-        for(let i = 0; i < tweetData.length; i++) {
+        for(let i = tweetData.length - 1; i >= 0; i--) {
             render = createTweetElement(tweetData[i]);
             $('.tweet-container').append(render);
         }
@@ -46,15 +54,14 @@ $(function() {
     $form.on('submit', function(e) {
         e.preventDefault();
         let formData = $('#form').serialize();
-
+        
         $.ajax('/tweets', {method: 'POST', data: formData})
         .done(function() {
-            console.log('request works');
+            loadTweets()
         });
-        console.log('submit button worked');
     });    
 
-    loadTweets()
+    
 });
 
 

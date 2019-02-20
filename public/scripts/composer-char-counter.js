@@ -8,10 +8,8 @@ $(function() {
         
         if (countdown < 50) {
             counter.css('color', 'darkred');
-        } 
-
-        if (countdown === 0) {
-            text.prop('disabled', true);
+        } else if (countdown < 99) {
+            counter.css('color', 'green');
         }
 
         counter.html(countdown);
