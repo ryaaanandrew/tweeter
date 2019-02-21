@@ -10,10 +10,37 @@ $(function() {
     };
 
     function escape(str) {
-        var div = document.createElement('div');
+        let div = document.createElement('div');
         div.appendChild(document.createTextNode(str));
         return div.innerHTML;
     };
+
+    function timeSince(date) {
+          let seconds = Math.floor((new Date() - date) / 1000);
+        
+          let interval = Math.floor(seconds / 31536000);
+        
+          if (interval > 1) {
+            return interval + " years";
+          }
+          interval = Math.floor(seconds / 2592000);
+          if (interval > 1) {
+            return interval + " months";
+          }
+          interval = Math.floor(seconds / 86400);
+          if (interval > 1) {
+            return interval + " days";
+          }
+          interval = Math.floor(seconds / 3600);
+          if (interval > 1) {
+            return interval + " hours";
+          }
+          interval = Math.floor(seconds / 60);
+          if (interval > 1) {
+            return interval + " minutes";
+          }
+          return Math.floor(seconds) + " seconds";
+        }
 
     function createTweetElement(tweetData) {
         let name = tweetData.user.name;
@@ -21,20 +48,24 @@ $(function() {
         let handle = tweetData.user.handle;
         let content = tweetData.content.text;
         let createdAt = tweetData.created_at;
-        let HTML = `<header>
-                        <img src="${regularAvatar}" class="user-avatar"></img>
-                        <h1>${name}</h1>
-                        <div class="username">${handle}</div>
-                    </header>
+        let HTML = `<section class="tweet"> 
+                        <header>
+                            <img src="${regularAvatar}" class="user-avatar"></img>
+                            <h1>${name}</h1>
+                            <div class="username">${handle}</div>
+                        </header>
 
-                    <article class="tweet-main">
-                        <p>${escape(content)}</p>
-                    </article>
+                        <article class="tweet-main">
+                            <p>${escape(content)}</p>
+                        </article>
 
-                    <footer>
-                        <div class="tweet-created">${createdAt}</div>
-                    </footer>`
-
+                        <footer class="tweet-footer">
+                            <div class="tweet-created">${timeSince(createdAt)}</div>
+                            <i class="fas fa-heart"></i>
+                            <i class="fas fa-retweet"></i>
+                            <i class="fas fa-biohazard"></i>
+                        </footer>
+                    </section>`
         return HTML;  
     };
 
@@ -67,6 +98,7 @@ $(function() {
             .done(function() {
                 loadTweets()
             });
+            $('textarea').empty();
         }
 
     });    
@@ -74,7 +106,9 @@ $(function() {
     let $compose = $('#compose-tweet');
 
     $compose.on('click', function() {
-        $('.new-tweet').toggle();
+        $('.new-tweet').slideToggle('slow', function(){
+        });
+        $('textarea').focus();
     });
     
 });
