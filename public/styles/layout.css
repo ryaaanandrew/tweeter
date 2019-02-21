@@ -85,6 +85,10 @@ body {
    padding: 1em 1em;
  }
 
+ #error {
+   display: none;
+ }
+
 
 
 

@@ -1,4 +1,3 @@
-
 $(function() {
     loadTweets()
 
@@ -50,17 +49,33 @@ $(function() {
     } 
 
     let $form = $('#form');
+    
 
     $form.on('submit', function(e) {
         e.preventDefault();
         let formData = $('#form').serialize();
+        let $charLength = $('textArea').val().length;
         
-        $.ajax('/tweets', {method: 'POST', data: formData})
-        .done(function() {
-            loadTweets()
-        });
+        if ($charLength === 0) {
+            $('#error').css('display', 'inline-block');
+        } else if ($charLength > 140) {
+            console.log ('tweet too large');
+            $('#error').css('display', 'inline-block');
+            $('#error').html('Exceeded tweet character limit!')
+        } else {
+            $.ajax('/tweets', {method: 'POST', data: formData})
+            .done(function() {
+                loadTweets()
+            });
+        }
+
     });    
 
+    let $compose = $('#compose-tweet');
+
+    $compose.on('click', function() {
+        $('.new-tweet').toggle();
+    });
     
 });
 
